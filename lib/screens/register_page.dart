@@ -13,8 +13,32 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  Future<void> _alertDialogBuilder() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Container(
+              child: Text("Dummy Text for this moment"),
+            ),
+            actions: [
+              TextButton(
+                child: Text("Close Alert"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool loadingForRegister = false;
+
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -39,12 +63,23 @@ class _RegisterPageState extends State<RegisterPage> {
                   hintText: "Password...",
                 ),
                 CustomButton(
-                    text: "Register", onPressed: () {}, outlineButton: false)
+                    text: "Register",
+                    onPressed: () {
+                      print("Register button Clicked");
+                      setState(() {
+                        print("Enterd");
+                        loadingForRegister = true;
+                      });
+                      // _alertDialogBuilder();
+                    },
+                    isFormLoading: loadingForRegister,
+                    outlineButton: false)
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: CustomButton(
+                isFormLoading: false,
                 text: "Back to Login",
                 onPressed: () {
                   Navigator.pop(context);

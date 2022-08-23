@@ -4,10 +4,12 @@ class CustomButton extends StatelessWidget {
   final String text;
   final Function onPressed;
   final bool outlineButton;
+  final bool isFormLoading;
   CustomButton({
     required this.text,
     required this.onPressed,
     required this.outlineButton,
+    required this.isFormLoading,
   });
 
   @override
@@ -27,21 +29,36 @@ class CustomButton extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(12.0),
         ),
-        // padding: const EdgeInsets.symmetric(
-        //   horizontal: 24.0,
-        //   vertical: 12.0,
-        // ),
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           vertical: 18.0,
           horizontal: 24.0,
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 16.0,
-            color: outlineButton ? Colors.black : Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Visibility(
+              visible: isFormLoading ? false : true,
+              child: Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: outlineButton ? Colors.black : Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+                visible: isFormLoading,
+                child: Center(
+                  child: SizedBox(
+                    height: 30.0,
+                    width: 30.0,
+                    child: CircularProgressIndicator(),
+                  ),
+                ))
+          ],
         ),
       ),
     );

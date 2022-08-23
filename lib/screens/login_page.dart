@@ -39,12 +39,17 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "Password...",
                 ),
                 CustomButton(
-                    text: "Log In", onPressed: () {}, outlineButton: false)
+                  text: "Log In",
+                  onPressed: () {},
+                  outlineButton: false,
+                  isFormLoading: false,
+                )
               ],
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 8.0),
               child: CustomButton(
+                isFormLoading: false,
                 text: "Create New Account",
                 onPressed: () {
                   Navigator.push(

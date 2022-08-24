@@ -33,8 +33,7 @@ class CustomButton extends StatelessWidget {
           vertical: 18.0,
           horizontal: 24.0,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
             Visibility(
               visible: isFormLoading ? false : true,

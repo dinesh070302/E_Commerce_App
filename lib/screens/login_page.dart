@@ -71,16 +71,17 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loadingForLogin = false;
       });
-    } else {
-      //As the string is empty beacuse of no errors we close the login screens and head to homepage
-      Navigator.pop(context);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => HomePage(),
-      //   ),
-      // );
     }
+    //  else {
+    //   //As the string is empty beacuse of no errors we close the login screens and head to homepage
+    //   Navigator.pop(context);
+    //   // Navigator.push(
+    //   //   context,
+    //   //   MaterialPageRoute(
+    //   //     builder: (context) => HomePage(),
+    //   //   ),
+    //   // );
+    // }
   }
 
   bool loadingForLogin = false;
@@ -92,19 +93,19 @@ class _LoginPageState extends State<LoginPage> {
   //focusNodes for input fields
   late FocusNode _passwordFocusNode;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   _passwordFocusNode = FocusNode();
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    _passwordFocusNode = FocusNode();
+    super.initState();
+  }
 
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   _passwordFocusNode.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,9 +132,9 @@ class _LoginPageState extends State<LoginPage> {
                   onChanged: (value) {
                     _loginEmail = value;
                   },
-                  // onSubmitted: (value) {
-                  //   _passwordFocusNode.requestFocus();
-                  // },
+                  onSubmitted: (value) {
+                    _passwordFocusNode.requestFocus();
+                  },
                   textInputAction: TextInputAction.next,
                 ),
                 CustomInput(
@@ -142,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                   onChanged: (value) {
                     _loginPassword = value;
                   },
-                  // focusNode: _passwordFocusNode,
+                  focusNode: _passwordFocusNode,
                   onSubmitted: (value) {
                     _submitForm();
                   },

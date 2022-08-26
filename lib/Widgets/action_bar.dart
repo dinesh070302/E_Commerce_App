@@ -12,11 +12,17 @@ class CustomActionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     bool _hastitle = hastitle ?? true;
     return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Colors.white, Colors.white.withOpacity(0)],
+            begin: const Alignment(0, 0),
+            end: const Alignment(0, 1)),
+      ),
       padding: const EdgeInsets.only(
         top: 56.0,
         left: 28.0,
         right: 24.0,
-        bottom: 24.0,
+        bottom: 42.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

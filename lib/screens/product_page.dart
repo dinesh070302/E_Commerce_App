@@ -22,6 +22,7 @@ class _ProductPageState extends State<ProductPage> {
   FirebaseServices firebaseServices = FirebaseServices();
 
   String selectedSize = "0";
+  bool saved = false;
 
   Future addToCart() {
     return firebaseServices.usersRef
@@ -31,7 +32,27 @@ class _ProductPageState extends State<ProductPage> {
         .set({"size": selectedSize});
   }
 
+  Future addToSaved() {
+    return firebaseServices.usersRef
+        .doc(firebaseServices.getUserId())
+        .collection("Saved")
+        .doc(widget.productId)
+        .set({"size": selectedSize});
+  }
+
+  Future<void> deleteFromSaved() {
+    return firebaseServices.usersRef
+        .doc(firebaseServices.getUserId())
+        .collection("Saved")
+        .doc(widget.productId)
+        .delete()
+        .then((value) => print("Product Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
+
   final SnackBar _snackBar = SnackBar(content: Text("Product Added to Cart"));
+  final SnackBar _snackBar2 =
+      SnackBar(content: Text("Product Removed to Cart"));
 
   @override
   Widget build(BuildContext context) {
@@ -108,17 +129,36 @@ class _ProductPageState extends State<ProductPage> {
                     padding: const EdgeInsets.all(24.0),
                     child: Row(
                       children: [
-                        Container(
-                          height: 65.0,
-                          width: 65.0,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFDCDCDC),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.bookmark_border_outlined,
-                            size: 32,
+                        GestureDetector(
+                          onTap: () async {
+                            if (saved == false) {
+                              await addToSaved();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(_snackBar);
+                            } else {
+                              await deleteFromSaved();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(_snackBar2);
+                            }
+                            setState(() {
+                              saved = !saved;
+                            });
+                          },
+                          child: Container(
+                            height: 65.0,
+                            width: 65.0,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFDCDCDC),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              saved
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border_outlined,
+                              color: Colors.grey[700],
+                              size: 32,
+                            ),
                           ),
                         ),
                         Expanded(

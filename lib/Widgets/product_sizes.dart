@@ -4,9 +4,11 @@ class ProductSizes extends StatefulWidget {
   const ProductSizes({
     Key? key,
     required this.productSizes,
+    this.selected,
   }) : super(key: key);
 
   final List productSizes;
+  final Function(String)? selected;
 
   @override
   State<ProductSizes> createState() => _ProductSizesState();
@@ -23,6 +25,7 @@ class _ProductSizesState extends State<ProductSizes> {
           for (var i = 0; i < widget.productSizes.length; i++)
             GestureDetector(
               onTap: () {
+                widget.selected!("${widget.productSizes[i]}");
                 setState(() {
                   _selected = i;
                 });

@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -62,7 +63,9 @@ class _BottomTabsState extends State<BottomTabs> {
           BottomBtn(
             selected: _selectedTab == 3 ? true : false,
             imagePath: Icon(Icons.logout),
-            onPressed: () {},
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
           ),
         ],
       ),

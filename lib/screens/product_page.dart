@@ -3,6 +3,7 @@ import 'package:e_commerce_website/Widgets/action_bar.dart';
 import 'package:e_commerce_website/Widgets/image_swipe.dart';
 import 'package:e_commerce_website/Widgets/product_sizes.dart';
 import 'package:e_commerce_website/constants.dart';
+import 'package:e_commerce_website/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +19,16 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  final CollectionReference _productsRef =
-      FirebaseFirestore.instance.collection("Products");
+  FirebaseServices firebaseServices = FirebaseServices();
 
-  final CollectionReference _usersRef =
-      FirebaseFirestore.instance.collection("Users");
-
-  User? user = FirebaseAuth.instance.currentUser;
+  String selectedSize = "0";
 
   Future addToCart() {
-    return _usersRef
-        .doc(user?.uid)
+    return firebaseServices.usersRef
+        .doc(firebaseServices.getUserId())
         .collection("Cart")
         .doc(widget.productId)
-        .set({"size": 1});
+        .set({"size": selectedSize});
   }
 
   final SnackBar _snackBar = SnackBar(content: Text("Product Added to Cart"));
@@ -42,7 +39,7 @@ class _ProductPageState extends State<ProductPage> {
         body: Stack(
       children: [
         FutureBuilder<dynamic>(
-          future: _productsRef.doc(widget.productId).get(),
+          future: firebaseServices.productsRef.doc(widget.productId).get(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Scaffold(
@@ -58,6 +55,7 @@ class _ProductPageState extends State<ProductPage> {
               //List of Images
               List imageList = documentData['images'];
               List productSizes = documentData['size'];
+              selectedSize = productSizes[0];
 
               return ListView(
                 padding: EdgeInsets.all(0.0),
@@ -100,7 +98,12 @@ class _ProductPageState extends State<ProductPage> {
                       style: Constants.regularDarkText,
                     ),
                   ),
-                  ProductSizes(productSizes: productSizes),
+                  ProductSizes(
+                    productSizes: productSizes,
+                    selected: (size) {
+                      selectedSize = size;
+                    },
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Row(

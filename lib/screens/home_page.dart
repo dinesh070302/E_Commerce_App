@@ -3,6 +3,7 @@ import 'package:e_commerce_website/Tabs/search_tab.dart';
 import 'package:e_commerce_website/Widgets/bottom_tabs.dart';
 import 'package:e_commerce_website/Tabs/saved_tab.dart';
 import 'package:e_commerce_website/Tabs/search_tab.dart';
+import 'package:e_commerce_website/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  FirebaseServices firebaseServices = FirebaseServices();
   late PageController _tabsPageController;
   int _selectedTab = 0;
 

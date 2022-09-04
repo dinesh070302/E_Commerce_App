@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_website/constants.dart';
+import 'package:e_commerce_website/screens/cart_page.dart';
+import 'package:e_commerce_website/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +11,18 @@ class CustomActionBar extends StatelessWidget {
   final bool? hasBackArrow;
   final bool? hastitle;
   final bool? hasBackground;
-  const CustomActionBar(
+  CustomActionBar(
       {this.title, this.hasBackArrow, this.hastitle, this.hasBackground});
+
+  final CollectionReference _usersRef =
+      FirebaseFirestore.instance.collection("Users");
+
+  FirebaseServices firebaseServices = FirebaseServices();
 
   @override
   Widget build(BuildContext context) {
     bool _hastitle = hastitle ?? true;
     bool _hasBackground = hasBackground ?? true;
-    final CollectionReference _usersRef =
-        FirebaseFirestore.instance.collection("Users");
-
-    User? _user = FirebaseAuth.instance.currentUser;
 
     return Container(
       decoration: BoxDecoration(
@@ -40,9 +43,11 @@ class CustomActionBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           if (hasBackArrow ?? false)
-            Container(
-              child: GestureDetector(
-                onTap: () {},
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
                 child: const Icon(
                   Icons.keyboard_backspace_outlined,
                   color: Colors.black,
@@ -55,33 +60,52 @@ class CustomActionBar extends StatelessWidget {
               title ?? "Action Bar",
               style: Constants.boldHeading,
             ),
-          Container(
-              width: 38.0,
-              height: 38.0,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: StreamBuilder(
-                stream:
-                    _usersRef.doc(_user?.uid).collection("Cart").snapshots(),
-                builder: ((context, snapshot) {
-                  int totalItems = 0;
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => CartPage()));
+            },
+            child: Container(
+                width: 38.0,
+                height: 38.0,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _usersRef
+                      .doc(firebaseServices.getUserId())
+                      .collection("Cart")
+                      .snapshots(),
+                  builder: ((BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    int totalItems = 0;
 
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    // List documents = snapshot.data;
-                    // totalItems = documents.length;
-                  }
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      // List documents = snapshot.data;
+                      // Map<String, dynamic> documentData =
+                      //     snapshot.data as Map<String, dynamic>;
+                      // totalItems = documentData.length;
+                      totalItems = snapshot.data!.docs.length;
+                      print(totalItems);
+                    }
 
-                  return Text("$totalItems",
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white));
-                }),
-              ))
+                    return Text("$totalItems",
+                        style: const TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white));
+                  }),
+                )),
+          )
         ],
       ),
     );
   }
 }
+
+
+/*
+lclhost://login/bharath
+100
+ */

@@ -14,7 +14,7 @@ class BottomTabs extends StatefulWidget {
 
 class _BottomTabsState extends State<BottomTabs> {
   int _selectedTab = 0;
-
+  final SnackBar _snackBar = SnackBar(content: Text("Logged Out"));
   @override
   Widget build(BuildContext context) {
     _selectedTab = widget.selectedTab ?? 0;
@@ -35,8 +35,14 @@ class _BottomTabsState extends State<BottomTabs> {
         children: [
           BottomBtn(
             imagePath: _selectedTab == 0
-                ? Icon(Icons.home)
-                : Icon(Icons.home_outlined),
+                ? Icon(
+                    Icons.home,
+                    size: 30,
+                  )
+                : Icon(
+                    Icons.home_outlined,
+                    size: 30,
+                  ),
             selected: _selectedTab == 0 ? true : false,
             onPressed: () {
               widget.tabPressed(0);
@@ -44,8 +50,14 @@ class _BottomTabsState extends State<BottomTabs> {
           ),
           BottomBtn(
             imagePath: _selectedTab == 1
-                ? Icon(Icons.search)
-                : Icon(Icons.search_rounded),
+                ? Icon(
+                    Icons.search,
+                    size: 30.0,
+                  )
+                : Icon(
+                    Icons.search_rounded,
+                    size: 30.0,
+                  ),
             selected: _selectedTab == 1 ? true : false,
             onPressed: () {
               widget.tabPressed(1);
@@ -53,8 +65,14 @@ class _BottomTabsState extends State<BottomTabs> {
           ),
           BottomBtn(
             imagePath: _selectedTab == 2
-                ? Icon(Icons.bookmark_outlined)
-                : Icon(Icons.bookmark_border),
+                ? Icon(
+                    Icons.bookmark_outlined,
+                    size: 30.0,
+                  )
+                : Icon(
+                    Icons.bookmark_border,
+                    size: 30,
+                  ),
             selected: _selectedTab == 2 ? true : false,
             onPressed: () {
               widget.tabPressed(2);
@@ -62,9 +80,13 @@ class _BottomTabsState extends State<BottomTabs> {
           ),
           BottomBtn(
             selected: _selectedTab == 3 ? true : false,
-            imagePath: Icon(Icons.logout),
+            imagePath: Icon(
+              Icons.logout,
+              size: 30,
+            ),
             onPressed: () {
               FirebaseAuth.instance.signOut();
+              ScaffoldMessenger.of(context).showSnackBar(_snackBar);
             },
           ),
         ],

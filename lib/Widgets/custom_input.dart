@@ -6,7 +6,19 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class CustomInput extends StatelessWidget {
   String hintText;
-  CustomInput({required this.hintText});
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final bool isPasswordField;
+  CustomInput({
+    required this.hintText,
+    this.onChanged,
+    this.onSubmitted,
+    this.focusNode,
+    this.textInputAction,
+    required this.isPasswordField,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +29,10 @@ class CustomInput extends StatelessWidget {
         color: Color(0xffF2F2F2),
       ),
       child: TextField(
+        obscureText: isPasswordField,
+        focusNode: focusNode,
+        onChanged: onChanged,
+        onSubmitted: onSubmitted,
         decoration: InputDecoration(
           contentPadding:
               EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
@@ -24,6 +40,7 @@ class CustomInput extends StatelessWidget {
           hintText: hintText,
         ),
         style: Constants.regularDarkText,
+        textInputAction: textInputAction,
       ),
     );
   }
